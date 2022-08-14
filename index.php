@@ -32,6 +32,6 @@ $app       = require realpath($bootstrap) ?: $bootstrap;
  * LAUNCH THE APPLICATION
  *---------------------------------------------------------------
  * Now that everything is setup, it's time to actually fire
- * up the engines and make this app do its thang.
+ * up the engines and make this app do its thang  AAD.
  */
 $app->run();
