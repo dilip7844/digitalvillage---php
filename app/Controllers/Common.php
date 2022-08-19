@@ -92,8 +92,7 @@ class Common
 
     public static function rootOfData()
     {
-        print_r(rootOfUploads);
-        return ROOTPATH . 'data/';
+         return ROOTPATH . 'data/';
     }
 
     public static function rootOfDomain()
