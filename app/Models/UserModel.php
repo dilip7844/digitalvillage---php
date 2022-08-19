@@ -172,11 +172,19 @@ class UserModel extends Model
         //$maxsize = "Your size limit";
         $mobile = $this->getMobile($this->userId);
         $newname = $this->userId . '-' . $mobile . '.png';
-        if (Common::uploadImage($tmp_name, Common::rootOfProfilePictures(), $newname)) {
-            return Common::createResponse(STATUS_SUCCESS, "Upload Success");
-        } else return Common::createResponse(STATUS_FAILED, "Upload Failed");
+        $location = Common::rootOfProfilePictures() . $newname;
+        if (Common::uploadImage($tmp_name, $location)) {
+            if ($this->updateProfilePicPath($location))
+                return Common::createResponse(STATUS_SUCCESS, "Profile Pic Updated Successfully");
+                else return Common::createResponse(STATUS_FAILED, "Failed to update Profile Pic");
+        } else return Common::createResponse(STATUS_FAILED, "Failed to upload Profile Pic");
     }
 
+    private function updateProfilePicPath($path)
+    {
+        $this->result = $this->db->query("UPDATE " . $this->table . " set profile_pic= '" . $path . "' where id=" . $this->userId);
+        return $this->db->affectedRows() > 0;
+    }
 
     public function updateFCMToken()
     {

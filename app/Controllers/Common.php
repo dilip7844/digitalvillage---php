@@ -85,9 +85,9 @@ class Common
         return date($pattern);
     }
 
-    public static function uploadImage($tmpName, $path, $newName)
+    public static function uploadImage($tmpName, $location)
     {
-        return move_uploaded_file($tmpName, $path . $newName);
+        return move_uploaded_file($tmpName, $location);
     }
 
     public static function rootOfData()
@@ -97,16 +97,16 @@ class Common
 
     public static function rootOfDomain()
     {
-        return Common::rootOfData() . Common::getDomain();
+        return Common::rootOfData() . Common::getDomain().'/';
     }
 
     public static function rootOfUploads()
     {
-        return Common::rootOfDomain() . '/uploads/';
+        return Common::rootOfDomain() . 'uploads/';
     }
 
     public static function rootOfProfilePictures()
     {
-        return Common::rootOfUploads() . '/profile_pictures/';
+        return Common::rootOfUploads() . 'profile_pictures/';
     }
 }
