@@ -17,10 +17,7 @@ class User extends BaseController
     use ResponseTrait;
     public function __construct()
     {
-        //header('Content-Type: application/json');
-        //$domain = $_POST['domain'];
-        $domain = Common::getParam(domain);
-        //if($domain=null) $domain='test';
+        $domain = Common::getDomain();
          \Config\Database::connect('default')->setDatabase($domain);
     }
 
@@ -125,6 +122,15 @@ class User extends BaseController
         $model->id = Common::getParam(id);
         $model->userId = Common::getParam(userId);
         $result = $model->updateUser();
+        return $this->respond($result);
+    }
+
+    public function updateProfilePic()
+    {
+        $model=new UserModel();
+        $model->profilePic=Common::getFile(profilePic);
+        $model->userId = Common::getParam(userId);
+        $result=$model->updateProfilePic();
         return $this->respond($result);
     }
 

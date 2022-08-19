@@ -16,7 +16,7 @@ class Notification extends BaseController
     use ResponseTrait;
     public function __construct()
     {
-        $domain = Common::getParam(domain);
+        $domain = Common::getDomain();
         \Config\Database::connect('default')->setDatabase($domain);
     }
 
@@ -41,6 +41,4 @@ class Notification extends BaseController
         if ($result)
             return $this->respond($result);
     }
-
-
 }

@@ -25,6 +25,7 @@ define('offset', 'offset');
 define('search', 'search');
 define('desc', 'desc');  //boolean
 define('userId', 'userId');
+define('profilePic', 'profilePic');
 
 //Notification
 define('sender', 'sender');
@@ -44,8 +45,6 @@ define('STATUS_USER_NOT_FOUND', '3');
 define('STATUS_USER_INACTIVE', '4');
 define('STATUS_USER_UNVERIFIED', '5');
 
-
-
 class Common
 {
     use ResponseTrait;
@@ -61,6 +60,12 @@ class Common
         return $obj;
     }
 
+    public static function getDomain()
+    {
+        // to concat to db initials name with domain
+        return '' . Common::getParam(domain);
+    }
+
     public static function getParam($param)
     {
         if (isset($_POST[$param]))
@@ -68,8 +73,40 @@ class Common
         else return null;
     }
 
+    public static function getFile($param)
+    {
+        if (isset($_FILES[$param]))
+            return $_FILES[$param];
+        else return null;
+    }
+
     public static function getCurrentTime($pattern = 'd-m-Y H:i:s')
     {
         return date($pattern);
+    }
+
+    public static function uploadImage($tmpName, $path, $newName)
+    {
+        return move_uploaded_file($tmpName, $path . $newName);
+    }
+
+    public static function rootOfData()
+    {
+        return ROOTPATH . '/data/';
+    }
+
+    public static function rootOfDomain()
+    {
+        return Common::rootOfData() . Common::getDomain();
+    }
+
+    public static function rootOfUploads()
+    {
+        return Common::rootOfDomain() . '/uploads/';
+    }
+
+    public static function rootOfProfilePictures()
+    {
+        return Common::rootOfUploads() . '/profile_pictures/';
     }
 }

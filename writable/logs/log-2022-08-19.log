@@ -1,0 +1,32 @@
+CRITICAL - 2022-08-19 13:02:36 --> Array to string conversion
+#0 D:\Setup\Installations\xampp\htdocs\mypro\app\Models\UserModel.php(174): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string...', 'D:\\Setup\\Instal...', 174)
+#1 D:\Setup\Installations\xampp\htdocs\mypro\app\Controllers\User.php(133): App\Models\UserModel->updateProfilePic()
+#2 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(832): App\Controllers\User->updateProfilePic()
+#3 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\User))
+#4 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#5 D:\Setup\Installations\xampp\htdocs\mypro\index.php(37): CodeIgniter\CodeIgniter->run()
+#6 {main}
+CRITICAL - 2022-08-19 13:04:33 --> Array to string conversion
+#0 D:\Setup\Installations\xampp\htdocs\mypro\app\Models\UserModel.php(174): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string...', 'D:\\Setup\\Instal...', 174)
+#1 D:\Setup\Installations\xampp\htdocs\mypro\app\Controllers\User.php(133): App\Models\UserModel->updateProfilePic()
+#2 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(832): App\Controllers\User->updateProfilePic()
+#3 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\User))
+#4 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#5 D:\Setup\Installations\xampp\htdocs\mypro\index.php(37): CodeIgniter\CodeIgniter->run()
+#6 {main}
+CRITICAL - 2022-08-19 13:05:07 --> Array to string conversion
+#0 D:\Setup\Installations\xampp\htdocs\mypro\app\Models\UserModel.php(174): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Array to string...', 'D:\\Setup\\Instal...', 174)
+#1 D:\Setup\Installations\xampp\htdocs\mypro\app\Controllers\User.php(133): App\Models\UserModel->updateProfilePic()
+#2 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(832): App\Controllers\User->updateProfilePic()
+#3 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\User))
+#4 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#5 D:\Setup\Installations\xampp\htdocs\mypro\index.php(37): CodeIgniter\CodeIgniter->run()
+#6 {main}
+CRITICAL - 2022-08-19 13:06:09 --> Cannot use object of type CodeIgniter\Database\MySQLi\Result as array
+#0 D:\Setup\Installations\xampp\htdocs\mypro\app\Models\UserModel.php(173): App\Models\UserModel->getMobile('6')
+#1 D:\Setup\Installations\xampp\htdocs\mypro\app\Controllers\User.php(133): App\Models\UserModel->updateProfilePic()
+#2 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(832): App\Controllers\User->updateProfilePic()
+#3 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\User))
+#4 D:\Setup\Installations\xampp\htdocs\mypro\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#5 D:\Setup\Installations\xampp\htdocs\mypro\index.php(37): CodeIgniter\CodeIgniter->run()
+#6 {main}

@@ -12,7 +12,7 @@ class NotificationModel extends Model
     protected $table = "notifications";
     protected $primaryKey = 'notification_id';
     protected $allowedFields = [
-        'notification_id', 'title', 'message', 'sender', 'receivers', 'icon', 'big_icon', 'extras','date'
+        'notification_id', 'title', 'message', 'sender', 'receivers', 'icon', 'big_icon', 'extras', 'date'
     ];
 
     var  $id = null;
@@ -88,7 +88,7 @@ class NotificationModel extends Model
         $query = 'SELECT fcm_token from users where id in (' . $ids  . ')';
         $this->result = $this->db->query($query);
         $res = $this->result->getResultArray();
-        return $res;
+        return $res; // returns list of FCM tokens
     }
 
     private function insertNotification()

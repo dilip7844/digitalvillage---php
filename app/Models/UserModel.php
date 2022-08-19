@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Controllers\Common;
+use App\Controllers\UploadController;
 use CodeIgniter\Model;
 use PDO;
 
@@ -35,14 +36,14 @@ class UserModel extends Model
     var  $isAuthority = null;
     var  $permissions = null;
     var  $fcmToken = null;
-
+    var  $profilePic = null;
 
     var $result = null;
 
     public function selectUsers()
     {
         // if($this->hasPermission($this->userId,PERMISSION_VIEW_USER)){
-        $query = 'SELECT * from ' . $this->table.' LEFT JOIN occupations ON users.occupation = occupations.occupation_id';
+        $query = 'SELECT * from ' . $this->table . ' LEFT JOIN occupations ON users.occupation = occupations.occupation_id';
         //echo $query;
         if ($this->search != null || $this->isActive != null || $this->isVerified != null || $this->isAuthority != null)
             $query = $query . " where";
@@ -159,6 +160,26 @@ class UserModel extends Model
         }
     }
 
+    public function updateProfilePic()
+    {
+        $file = $this->profilePic;
+        //  var_dump($file);
+        // $name = $file['name'];
+        // $size = $file['size'];
+        // $type = $file['type'];
+        $tmp_name = $file['tmp_name'];
+        //$error = $file['error'];
+        //$maxsize = "Your size limit";
+        $mobile = $this->getMobile($this->userId);
+        $newname = $this->userId . '-' . $mobile . '.png';
+        // $location = ROOTPATH . '/data/' . $domain . '/uploads/' . $newname;
+        echo Common::rootOfData();
+        if (Common::uploadImage($tmp_name, Common::rootOfData(), $newname)) {
+            return Common::createResponse(STATUS_SUCCESS, "Upload Success");
+        } else return Common::createResponse(STATUS_FAILED, "Upload Failed");
+    }
+
+
     public function updateFCMToken()
     {
         if ($this->isExist("id", $this->id)) {
@@ -194,6 +215,13 @@ class UserModel extends Model
         $query = 'SELECT id from ' . $this->table . ' where ' . $key . '=' . $value . '';
         $res = $this->db->query($query);
         return $res->getNumRows() > 0;
+    }
+
+    private function getMobile($userId)
+    {
+        $query = 'SELECT mobile from ' . $this->table . ' where id=' . $userId . '';
+        $res = $this->db->query($query)->getRowArray(0);
+        return $res["mobile"];
     }
 
     private function isUserActive($id)
