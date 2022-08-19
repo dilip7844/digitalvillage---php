@@ -172,9 +172,7 @@ class UserModel extends Model
         //$maxsize = "Your size limit";
         $mobile = $this->getMobile($this->userId);
         $newname = $this->userId . '-' . $mobile . '.png';
-        // $location = ROOTPATH . '/data/' . $domain . '/uploads/' . $newname;
-        echo Common::rootOfData();
-        if (Common::uploadImage($tmp_name, Common::rootOfData(), $newname)) {
+        if (Common::uploadImage($tmp_name, Common::rootOfProfilePictures(), $newname)) {
             return Common::createResponse(STATUS_SUCCESS, "Upload Success");
         } else return Common::createResponse(STATUS_FAILED, "Upload Failed");
     }
