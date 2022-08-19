@@ -1,2 +1,3 @@
 app/Config/Database.php
-writable/logs
+writable/logs/*
+data/*
