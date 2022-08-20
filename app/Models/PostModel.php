@@ -20,10 +20,15 @@ class PostModel extends Model
 
     public function getPost()
     {
-        $this->result = $this->db->query('SELECT * from ' . $this->table .' where post_id=' . $this->id);
+        $this->result = $this->db->query('SELECT * from ' . $this->table . ' where post_id=' . $this->id);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
             return Common::createResponse(STATUS_NO_DATA, "Post not found");
         return Common::createResponse(STATUS_SUCCESS, "Post Fetched", $res);
+    }
+
+    private function isResultEmpty()
+    {
+        return $this->result->getNumRows() == 0;
     }
 }

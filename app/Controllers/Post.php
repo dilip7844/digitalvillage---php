@@ -16,6 +16,7 @@ class Post extends BaseController
 
     public function createPost()
     {
+        echo "create post";
     }
 
     public function getPost()

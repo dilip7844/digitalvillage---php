@@ -4,11 +4,8 @@ namespace App\Controllers;
 
 use App\Models\NotificationModel;
 use CodeIgniter\API\ResponseTrait;
-use PDO;
-use stdClass;
 
 // TODO //Need to confirm if we have to close db connection at the end ..
-
 
 class Notification extends BaseController
 {
