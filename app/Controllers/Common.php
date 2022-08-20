@@ -82,6 +82,7 @@ class Common
 
     public static function getCurrentTime($pattern = 'd-m-Y H:i:s')
     {
+        date_default_timezone_set("Asia/Kolkata");
         return date($pattern);
     }
 
@@ -92,12 +93,12 @@ class Common
 
     public static function rootOfData()
     {
-         return ROOTPATH . 'data/';
+        return ROOTPATH . 'data/';
     }
 
     public static function rootOfDomain()
     {
-        return Common::rootOfData() . Common::getDomain().'/';
+        return Common::rootOfData() . Common::getDomain() . '/';
     }
 
     public static function rootOfUploads()
