@@ -4,13 +4,8 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
-use PDO;
-use stdClass;
-
-//use App\Controllers\BaseController;
 
 // TODO //Need to confirm if we have to close db connection at the end ..
-
 
 class User extends BaseController
 {
@@ -56,7 +51,7 @@ class User extends BaseController
         $fcmToken = Common::getParam(fcmToken);
         $dob = Common::getParam(dob);
         $date = Common::getCurrentTime();
-
+        $timestamp=Common::getCurrentTimeStamp();
         $data = [
             'first_name' => $firstName,
             'middle_name'  => $middleName,
@@ -73,7 +68,7 @@ class User extends BaseController
             'created_on'  => $date,
             'profile_pic' => '',
             'fcm_token' => $fcmToken,
-
+            'timestamp'=> $timestamp
         ];
         $result = $model->insertUser($data);
         return $this->respond($result);

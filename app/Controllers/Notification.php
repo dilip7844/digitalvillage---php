@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\NotificationModel;
-use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 use PDO;
 use stdClass;

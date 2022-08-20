@@ -4,15 +4,13 @@ namespace App\Models;
 
 use App\Controllers\Common;
 use CodeIgniter\Model;
-use PDO;
-
 
 class NotificationModel extends Model
 {
     protected $table = "notifications";
     protected $primaryKey = 'notification_id';
     protected $allowedFields = [
-        'notification_id', 'title', 'message', 'sender', 'receivers', 'icon', 'big_icon', 'extras', 'date'
+        'notification_id', 'title', 'message', 'sender', 'receivers', 'icon', 'big_icon', 'extras', 'date','timestamp'
     ];
 
     var  $id = null;
@@ -101,7 +99,8 @@ class NotificationModel extends Model
             'extras' => $this->extras,
             'sender' => $this->sender,
             'receivers' => $this->receivers,
-            'date' => Common::getCurrentTime()
+            'date' => Common::getCurrentTime(),
+            'timestamp'=>Common::getCurrentTimeStamp()
         ];
 
         $res = $this->insert($data);

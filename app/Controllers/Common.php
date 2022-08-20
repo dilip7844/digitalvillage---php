@@ -80,10 +80,21 @@ class Common
         else return null;
     }
 
-    public static function getCurrentTime($pattern = 'd-m-Y H:i:s')
+    public static function setTimeZone()
     {
         date_default_timezone_set("Asia/Kolkata");
+    }
+
+    public static function getCurrentTime($pattern = 'd-m-Y H:i:s')
+    {
+        Common::setTimeZone();
         return date($pattern);
+    }
+
+    public static function getCurrentTimeStamp()
+    {
+        Common::setTimeZone();
+        return time();
     }
 
     public static function uploadImage($tmpName, $location)

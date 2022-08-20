@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Controllers\Common;
-use App\Controllers\UploadController;
 use CodeIgniter\Model;
-use PDO;
 
 define('PERMISSION_VIEW_USER', 'view_user');
 define('PERMISSION_ADD_USER', 'add_user');
@@ -21,7 +19,7 @@ class UserModel extends Model
     protected $allowedFields = [
         'id', 'first_name', 'middle_name', 'last_name', 'mobile',
         'gender', 'dob', 'occupation', 'is_authority', 'permissions',
-        'is_verified', 'is_active', 'service', 'created_on', 'profile_pic', 'fcm_token'
+        'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on','timestamp'
     ];
 
     protected $tableOccupation = "occupations";
@@ -94,7 +92,7 @@ class UserModel extends Model
             $where = 'id=' . $this->id;
         if ($this->mobile != null)
             $where = 'mobile=' . $this->mobile;
-        $this->result = $this->db->query('SELECT * from ' . $this->table . ' where ' . $where);
+        $this->result = $this->db->query('SELECT * from ' . $this->table . ' LEFT JOIN occupations ON users.occupation = occupations.occupation_id where ' . $where);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
             return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
