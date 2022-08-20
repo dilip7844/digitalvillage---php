@@ -162,28 +162,17 @@ class UserModel extends Model
 
     public function updateProfilePic()
     {
-        $file = $this->profilePic;
-        //  var_dump($file);
-        // $name = $file['name'];
-        // $size = $file['size'];
-        // $type = $file['type'];
-        $tmp_name = $file['tmp_name'];
-        //$error = $file['error'];
-        //$maxsize = "Your size limit";
+        $files = $this->profilePic;
+        $fileModel = new FileModel($files);
         $mobile = $this->getMobile($this->userId);
-        $newname = $this->userId . '-' . $mobile . '.png';
-        $location = Common::rootOfProfilePictures() . $newname;
-        if (Common::uploadImage($tmp_name, $location)) {
-            if ($this->updateProfilePicPath($location))
+        if (!empty($mobile)) {
+            $newname = $this->userId . '-' . $mobile . '.png';
+            $location = Common::rootOfProfilePictures() . $newname;
+            if (Common::uploadImage($fileModel->getTempName(), $location)) {
+                $this->db->query("UPDATE " . $this->table . " set profile_pic= '" . $location . "' where id=" . $this->userId);
                 return Common::createResponse(STATUS_SUCCESS, "Profile Pic Updated Successfully");
-                else return Common::createResponse(STATUS_FAILED, "Failed to update Profile Pic");
-        } else return Common::createResponse(STATUS_FAILED, "Failed to upload Profile Pic");
-    }
-
-    private function updateProfilePicPath($path)
-    {
-        $this->result = $this->db->query("UPDATE " . $this->table . " set profile_pic= '" . $path . "' where id=" . $this->userId);
-        return $this->db->affectedRows() > 0;
+            } else return Common::createResponse(STATUS_FAILED, "Failed to upload Profile Pic");
+        } else return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
     }
 
     public function updateFCMToken()
@@ -226,7 +215,10 @@ class UserModel extends Model
     private function getMobile($userId)
     {
         $query = 'SELECT mobile from ' . $this->table . ' where id=' . $userId . '';
-        $res = $this->db->query($query)->getRowArray(0);
+        $arr = $this->db->query($query);
+        if ($arr->getNumRows() > 0)
+            $res = $arr->getRowArray(0);
+        else return "";
         return $res["mobile"];
     }
 
