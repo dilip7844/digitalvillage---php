@@ -19,7 +19,7 @@ class UserModel extends Model
     protected $allowedFields = [
         'id', 'first_name', 'middle_name', 'last_name', 'mobile',
         'gender', 'dob', 'occupation', 'is_authority', 'permissions',
-        'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on','timestamp'
+        'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on', 'timestamp'
     ];
 
     protected $tableOccupation = "occupations";
@@ -36,6 +36,14 @@ class UserModel extends Model
     var  $fcmToken = null;
     var  $profilePic = null;
 
+    var  $firstName = null;
+    var  $middleName = null;
+    var  $lastName = null;
+    var  $dob = null;
+    var  $gender = null;
+    var  $occupation = null;
+
+
     var $result = null;
 
     public function selectUsers()
@@ -45,9 +53,6 @@ class UserModel extends Model
         //echo $query;
         if ($this->search != null || $this->isActive != null || $this->isVerified != null || $this->isAuthority != null)
             $query = $query . " where";
-
-        // if ($this->search != null || $this->isActive != null || $this->isVerified != null || $this->isAuthority != null)
-        //     $query = $query . " where";
 
         if ($this->isActive != null) {
             $query = $query . " is_active=" . $this->isActive . "";
@@ -100,11 +105,29 @@ class UserModel extends Model
     }
 
 
-    public function insertUser($data)
+    public function insertUser()
     {
-        if ($this->isExist('mobile', $data[mobile])) {
-            return Common::createResponse(1, "User already exist with mobile Number " . $data[mobile]);
+        if ($this->isExist('mobile', $this->mobile)) {
+            return Common::createResponse(1, "User already exist with mobile Number " . $this->mobile);
         } else {
+            $data = [
+                'first_name' => $this->firstName,
+                'middle_name'  => $this->middleName,
+                'last_name'  => $this->lastName,
+                'mobile'  => $this->mobile,
+                'gender'  => $this->gender,
+                'dob'  => $this->dob,
+                'occupation'  => $this->occupation,
+                'is_authority'  => '0',
+                'permissions'  => PERMISSION_DEFAULT,
+                'is_verified'  => '0',
+                'is_active'  => '1',
+                'service'  => '',
+                'created_on'  => Common::getCurrentTime(),
+                'profile_pic' => '',
+                'fcm_token' => $this->fcmToken,
+                'timestamp' => Common::getCurrentTimeStamp()
+            ];
             $res = $this->insert($data);
             if ($res) {
                 $root = Common::createResponse(STATUS_SUCCESS, "User Created");
@@ -152,7 +175,7 @@ class UserModel extends Model
         if ($this->userId != $this->id) { // User is updating other's profile ,
             if ($this->hasPermission($this->userId, PERMISSION_EDIT_USER)) { //Check if he has the permission
 
-            } else return Common::createResponse(1, "You don't have permission to update user's information");
+            } else return Common::createResponse(STATUS_NO_PERMISSION, "You don't have permission to update user's information");
         } else { //User is Updating self profile
 
         }
@@ -194,7 +217,7 @@ class UserModel extends Model
         return Common::createResponse(STATUS_SUCCESS, "Occupations Fetched", $res);
     }
 
-    private function hasPermission($id, $strPermission)
+    public function hasPermission($id, $strPermission)
     {
         $query = 'SELECT permissions from ' . $this->table . ' where id=' . $id . '';
         $res = $this->db->query($query)->getRowArray(0);

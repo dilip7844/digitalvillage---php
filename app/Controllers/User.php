@@ -42,35 +42,16 @@ class User extends BaseController
     public function createUser()
     {
         $model = new UserModel();
-        $firstName = Common::getParam(firstName);
-        $middleName = Common::getParam(middleName);
-        $lastName = Common::getParam(lastName);
-        $mobile = Common::getParam(mobile);
-        $gender = Common::getParam(gender);
-        $occupation = Common::getParam(occupation);
-        $fcmToken = Common::getParam(fcmToken);
-        $dob = Common::getParam(dob);
-        $date = Common::getCurrentTime();
-        $timestamp=Common::getCurrentTimeStamp();
-        $data = [
-            'first_name' => $firstName,
-            'middle_name'  => $middleName,
-            'last_name'  => $lastName,
-            'mobile'  => $mobile,
-            'gender'  => $gender,
-            'dob'  => $dob,
-            'occupation'  => $occupation,
-            'is_authority'  => '0',
-            'permissions'  => PERMISSION_DEFAULT,
-            'is_verified'  => '0',
-            'is_active'  => '1',
-            'service'  => '',
-            'created_on'  => $date,
-            'profile_pic' => '',
-            'fcm_token' => $fcmToken,
-            'timestamp'=> $timestamp
-        ];
-        $result = $model->insertUser($data);
+        $model->firstName=Common::getParam(firstName);
+        $model->middleName = Common::getParam(middleName);
+        $model->lastName = Common::getParam(lastName);
+        $model->mobile = Common::getParam(mobile);
+        $model->gender = Common::getParam(gender);
+        $model->occupation = Common::getParam(occupation);
+        $model->fcmToken = Common::getParam(fcmToken);
+        $model->dob = Common::getParam(dob);
+      
+        $result = $model->insertUser();
         return $this->respond($result);
     }
 

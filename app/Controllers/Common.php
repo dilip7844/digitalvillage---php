@@ -36,6 +36,13 @@ define('icon', 'icon');
 define('bigIcon', 'bigIcon');
 define('extras', 'extras');
 
+//post
+define('post', 'post');
+define('images', 'images');
+define('isVisible', 'isVisible');
+
+
+
 
 
 define('STATUS_SUCCESS', '0');
@@ -44,6 +51,7 @@ define('STATUS_NO_DATA', '2');
 define('STATUS_USER_NOT_FOUND', '3');
 define('STATUS_USER_INACTIVE', '4');
 define('STATUS_USER_UNVERIFIED', '5');
+define('STATUS_NO_PERMISSION', '6');
 
 class Common
 {
@@ -120,5 +128,10 @@ class Common
     public static function rootOfProfilePictures()
     {
         return Common::rootOfUploads() . 'profile_pictures/';
+    }
+
+    public static function rootOfPosts()
+    {
+        return Common::rootOfUploads() . 'posts/';
     }
 }
