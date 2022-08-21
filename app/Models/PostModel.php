@@ -53,8 +53,8 @@ class PostModel extends Model
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
-            return Common::createResponse(STATUS_USER_NOT_FOUND, "Post not found");
-        return Common::createResponse(STATUS_SUCCESS, "Post Fetched", $res);
+            return Common::createResponse(STATUS_NO_DATA, "No Posts");
+        return Common::createResponse(STATUS_SUCCESS, "Posts Fetched", $res);
     }
 
     public function insertPost()

@@ -5,13 +5,6 @@ namespace App\Models;
 use App\Controllers\Common;
 use CodeIgniter\Model;
 
-define('PERMISSION_VIEW_USER', 'view_user');
-define('PERMISSION_ADD_USER', 'add_user');
-define('PERMISSION_EDIT_USER', 'edit_user');
-define('PERMISSION_ADD_POST', 'add_post');
-
-define('PERMISSION_DEFAULT', PERMISSION_VIEW_USER . ',' . PERMISSION_ADD_POST);
-
 class UserModel extends Model
 {
     protected $table = "users";
@@ -85,7 +78,7 @@ class UserModel extends Model
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
-            return Common::createResponse(STATUS_USER_NOT_FOUND, "Users not found");
+            return Common::createResponse(STATUS_NO_DATA, "No Users");
         return Common::createResponse(STATUS_SUCCESS, "Users Fetched", $res);
         //}else return Common::createResponse(1, "Sorry !! You don't have permission to view users. Please contact Authority");
     }

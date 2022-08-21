@@ -36,15 +36,19 @@ define('icon', 'icon');
 define('bigIcon', 'bigIcon');
 define('extras', 'extras');
 
-//post
+//post && events
 define('post', 'post');
+define('event', 'event');
+define('description', 'description');
+define('venue', 'venue');
+define('venueLatLng', 'venueLatLng');
+define('startDate', 'startDate');
+define('endDate', 'endDate');
+define('category', 'category');
 define('images', 'images');
 define('isVisible', 'isVisible');
 
-
-
-
-
+//STATUS CODES
 define('STATUS_SUCCESS', '0');
 define('STATUS_FAILED', '1');
 define('STATUS_NO_DATA', '2');
@@ -52,6 +56,16 @@ define('STATUS_USER_NOT_FOUND', '3');
 define('STATUS_USER_INACTIVE', '4');
 define('STATUS_USER_UNVERIFIED', '5');
 define('STATUS_NO_PERMISSION', '6');
+
+// PERSMISSIONS
+define('PERMISSION_VIEW_USER', 'view_user');
+define('PERMISSION_ADD_USER', 'add_user');
+define('PERMISSION_EDIT_USER', 'edit_user');
+define('PERMISSION_ADD_POST', 'add_post');
+define('PERMISSION_ADD_EVENT', 'add_event');
+
+//DEFAULT USER PERMISSIONS
+define('PERMISSION_DEFAULT', PERMISSION_VIEW_USER . ',' . PERMISSION_ADD_POST);
 
 class Common
 {
@@ -93,7 +107,7 @@ class Common
         date_default_timezone_set("Asia/Kolkata");
     }
 
-    public static function getCurrentTime($pattern = 'd-m-Y H:i:s')
+    public static function getCurrentTime($pattern = 'd M Y H:i:s')
     {
         Common::setTimeZone();
         return date($pattern);
@@ -133,5 +147,9 @@ class Common
     public static function rootOfPosts()
     {
         return Common::rootOfUploads() . 'posts/';
+    }
+    public static function rootOfEvents()
+    {
+        return Common::rootOfUploads() . 'events/';
     }
 }
