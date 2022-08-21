@@ -100,7 +100,7 @@ class PostModel extends Model
 
     public function getPost()
     {
-        $this->result = $this->db->query('SELECT * from ' . $this->table . ' where post_id=' . $this->id);
+        $this->result = $this->db->query('SELECT * from ' . $this->table . ' LEFT JOIN users ON posts.created_by = users.id where post_id=' . $this->id);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
             return Common::createResponse(STATUS_NO_DATA, "Post not found");
