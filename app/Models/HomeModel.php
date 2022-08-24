@@ -101,7 +101,7 @@ class HomeModel extends Model
             and u.is_verified = 1) as tmp
     
     order by
-        timestamp desc limit ".$limit." offset ".$offset;
+        timestamp desc limit ".$this->limit." offset ".$this->offset;
 
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
