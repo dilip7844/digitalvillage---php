@@ -19,6 +19,8 @@ class Home extends BaseController
     {
         $model = new HomeModel();
         $result = $model->getHome();
+        $model->limit= Common::getParam(limit);
+        $model->offset= Common::getParam(offset);
         return $this->respond($result);
     }
 }

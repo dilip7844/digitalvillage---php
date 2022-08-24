@@ -8,6 +8,8 @@ use App\Controllers\Common;
 class HomeModel extends Model
 {
     var $result = null;
+    var $limit = null;
+    var $offset = null;
 
     public function getHome()
     {
@@ -99,7 +101,7 @@ class HomeModel extends Model
             and u.is_verified = 1) as tmp
     
     order by
-        timestamp desc";
+        timestamp desc limit ".$limit." offset ".$offset;
 
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
