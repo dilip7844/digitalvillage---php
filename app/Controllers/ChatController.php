@@ -1,5 +1,5 @@
 <?php
-$host="https://app.pachal.in";
+$host="app.pachal.in";
 //$host="127.0.0.1";
 $port=8085;
 $socket=socket_create(AF_INET,SOCK_STREAM,0) or die('Not Created');
