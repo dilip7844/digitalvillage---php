@@ -99,10 +99,13 @@ class HomeModel extends Model
         where
             u.is_active = 1
             and u.is_verified = 1) as tmp
-    
     order by
-        timestamp desc limit ".$this->limit." offset ".$this->offset;
+        timestamp desc";
 
+        if ($this->limit != null && $this->offset != null) {
+            $query = $query . " limit " . $this->limit . " offset " . $this->offset;
+            //echo "offset limit is not empty";
+        }
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
         if ($this->isResultEmpty())
