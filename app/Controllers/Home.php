@@ -23,4 +23,11 @@ class Home extends BaseController
         $result = $model->getHome();
         return $this->respond($result);
     }
+
+    public function startChatServer()
+    {
+        $chatServer = ROOTPATH . "bin/ChatServer.php";
+        echo $chatServer;
+        exec("php -q " . $chatServer);
+    }
 }
