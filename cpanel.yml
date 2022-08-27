@@ -1,5 +1,5 @@
 ---
 deployment:
 task:
-- export DEPLOYPATH="/home/packaltk/digitalvillage"
+- export DEPLOYPATH="/home/packaltk/digitalvillage/"
 - /bin/cp * $DEPLOYPATH
