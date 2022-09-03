@@ -23,6 +23,7 @@ class HomeModel extends Model
             p.created_on,
             first_name,
             last_name,
+            occupations.occupation_name,
             profile_pic,
             images,
             p.post as post,
@@ -40,8 +41,10 @@ class HomeModel extends Model
             '' as user_id
         from
             posts p
-        left join users on 
+        left join users on
             p.created_by = users.id
+        left join occupations on
+            users.occupation = occupations.occupation_id
         where
             p.is_visible = 1
     union all
@@ -51,6 +54,7 @@ class HomeModel extends Model
             e.created_on,
             first_name,
             last_name,
+            occupations.occupation_name,
             profile_pic,
             images,
             '' as post,
@@ -66,10 +70,12 @@ class HomeModel extends Model
             '' as post_id,
             e.event_id,
             '' as user_id
-        from 
+        from
             events e
         left join users on
             e.created_by = users.id
+        left join occupations on
+            users.occupation = occupations.occupation_id
         where
             e.is_visible = 1
     union all
@@ -79,6 +85,7 @@ class HomeModel extends Model
             created_on,
             first_name,
             last_name,
+            occupations.occupation_name,
             profile_pic,
             '' as images,
             '' as post,
@@ -96,6 +103,8 @@ class HomeModel extends Model
             u.id
         from
             users u
+        LEFT JOIN occupations ON
+            u.occupation = occupations.occupation_id
         where
             u.is_active = 1
             and u.is_verified = 1) as tmp
