@@ -126,7 +126,7 @@ class Common
 
     public static function rootOfData()
     {
-        return HOMEPATH . 'data/';
+        return 'data/';
     }
 
     public static function rootOfDomain()
