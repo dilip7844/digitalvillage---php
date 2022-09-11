@@ -53,6 +53,8 @@ class HomeModel extends Model
         where
             p.is_visible = 1
             and b.is_visible = 1
+            or p.is_business_post = 0
+            or 1
     union all
         select
             'event' as type,
