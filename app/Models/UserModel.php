@@ -10,12 +10,13 @@ class UserModel extends Model
     protected $table = "users";
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'id', 'first_name', 'middle_name', 'last_name', 'mobile',
+        'id', 'first_name', 'middle_name', 'last_name', 'mobile','address',
         'gender', 'dob', 'occupation', 'is_authority', 'permissions',
         'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on', 'timestamp'
     ];
 
-    protected $tableOccupation = "occupations";
+    var $tableOccupation = "occupations";
+    
     var  $search = null;
     var  $id = null;
     var  $userId = null;
@@ -34,6 +35,7 @@ class UserModel extends Model
     var  $lastName = null;
     var  $dob = null;
     var  $gender = null;
+    var  $address = null;
     var  $occupation = null;
 
 
@@ -109,6 +111,7 @@ class UserModel extends Model
                 'last_name'  => $this->lastName,
                 'mobile'  => $this->mobile,
                 'gender'  => $this->gender,
+                'address'  => $this->address,
                 'dob'  => $this->dob,
                 'occupation'  => $this->occupation,
                 'is_authority'  => '0',

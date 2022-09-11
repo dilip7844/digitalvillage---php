@@ -11,6 +11,7 @@ define('firstName', 'firstName');
 define('middleName', 'middleName');
 define('lastName', 'lastName');
 define('dob', 'dob');
+define('address', 'address');
 define('mobile', 'mobile');
 define('gender', 'gender');
 define('occupation', 'occupation');

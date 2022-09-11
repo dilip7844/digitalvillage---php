@@ -50,6 +50,7 @@ class User extends BaseController
         $model->occupation = Common::getParam(occupation);
         $model->fcmToken = Common::getParam(fcmToken);
         $model->dob = Common::getParam(dob);
+        $model->address = Common::getParam(address);
       
         $result = $model->insertUser();
         return $this->respond($result);
