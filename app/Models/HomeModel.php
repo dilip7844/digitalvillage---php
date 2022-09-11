@@ -23,12 +23,15 @@ class HomeModel extends Model
             p.created_on,
             first_name,
             last_name,
-            occupations.occupation_name,
+            o.occupation_name,
             profile_pic,
-            images,
+            p.images,
             p.post as post,
             p.liked_by ,
             p.disliked_by ,
+            p.is_business_post,
+            p.business_id,
+            b.outlet_name,
             '' as event,
             '' as description,
             '' as venue,
@@ -43,10 +46,13 @@ class HomeModel extends Model
             posts p
         left join users on
             p.created_by = users.id
-        left join occupations on
-            users.occupation = occupations.occupation_id
+        left join occupations o on
+            users.occupation = o.occupation_id
+        left join businesses b on
+            p.business_id = b.business_id
         where
             p.is_visible = 1
+            and b.is_visible = 1
     union all
         select
             'event' as type,
@@ -54,12 +60,15 @@ class HomeModel extends Model
             e.created_on,
             first_name,
             last_name,
-            occupations.occupation_name,
+            o.occupation_name,
             profile_pic,
-            images,
+            e.images,
             '' as post,
             '' as liked_by,
             '' as disliked_by,
+            '' as is_business_post,
+            '' as business_id,
+            '' as outlet_name,
             e.event as event,
             e.description,
             e.venue,
@@ -74,8 +83,8 @@ class HomeModel extends Model
             events e
         left join users on
             e.created_by = users.id
-        left join occupations on
-            users.occupation = occupations.occupation_id
+        left join occupations o on
+            users.occupation = o.occupation_id
         where
             e.is_visible = 1
     union all
@@ -85,12 +94,15 @@ class HomeModel extends Model
             created_on,
             first_name,
             last_name,
-            occupations.occupation_name,
+            o.occupation_name,
             profile_pic,
             '' as images,
             '' as post,
             '' as liked_by,
             '' as disliked_by,
+            '' as is_business_post,
+            '' as business_id,
+            '' as outlet_name,
             '' as event,
             '' as description,
             '' as venue,
@@ -103,8 +115,8 @@ class HomeModel extends Model
             u.id
         from
             users u
-        LEFT JOIN occupations ON
-            u.occupation = occupations.occupation_id
+        left join occupations o on
+            u.occupation = o.occupation_id
         where
             u.is_active = 1
             and u.is_verified = 1) as tmp

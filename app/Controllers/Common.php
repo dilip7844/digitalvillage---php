@@ -37,6 +37,18 @@ define('icon', 'icon');
 define('bigIcon', 'bigIcon');
 define('extras', 'extras');
 
+//Business
+define('businessId', 'businessId');
+define('outletName', 'outletName');
+define('owners', 'owners');
+define('products', 'products');
+define('contactNumber', 'contactNumber');
+define('about', 'about');
+define('openingTime', 'openingTime');
+define('closingTime', 'closingTime');
+define('email', 'email');
+define('posts', 'posts');
+
 //post && events
 define('post', 'post');
 define('event', 'event');
@@ -64,6 +76,7 @@ define('PERMISSION_ADD_USER', 'add_user');
 define('PERMISSION_EDIT_USER', 'edit_user');
 define('PERMISSION_ADD_POST', 'add_post');
 define('PERMISSION_ADD_EVENT', 'add_event');
+define('PERMISSION_ADD_BUSINESS', 'add_business');
 
 //DEFAULT USER PERMISSIONS
 define('PERMISSION_DEFAULT', PERMISSION_VIEW_USER . ',' . PERMISSION_ADD_POST);
@@ -149,10 +162,12 @@ class Common
     {
         return Common::rootOfUploads() . 'posts/';
     }
+    public static function rootOfBusinesses()
+    {
+        return Common::rootOfUploads() . 'businesses/';
+    }
     public static function rootOfEvents()
     {
         return Common::rootOfUploads() . 'events/';
     }
-    
-    
 }

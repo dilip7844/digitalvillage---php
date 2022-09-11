@@ -32,6 +32,7 @@ class Post extends BaseController
     {
         $model = new PostModel();
         $model->post = Common::getParam(post);
+        $model->businessId = Common::getParam(businessId);
         $model->images = Common::getFile(images);
         $model->userId = Common::getParam(userId);
         $result = $model->insertPost();

@@ -246,6 +246,20 @@ class UserModel extends Model
         return $res['is_active'] == 1;
     }
 
+    public function addBusiness($businessId)
+    {
+        $arr = $this->db->query("Select business from " . $this->table . " where id= " . $this->id);
+        if ($arr->getNumRows() > 0)
+            $res = $arr->getRowArray(0);
+        else return "";
+        if ($res["business"] == "")
+            $this->db->query("update " . $this->table . " set business=" . $businessId . " where id= " . $this->id);
+        else  $this->db->query("update " . $this->table . " set business= concat(business,'," . $businessId . "') where id= " . $this->id);
+        if ($this->db->affectedRows() > 0)
+            return Common::createResponse(STATUS_SUCCESS, "Updated User's Business");
+        else return Common::createResponse(STATUS_FAILED, "Unable to update users Business");
+    }
+
     private function isResultEmpty()
     {
         return $this->result->getNumRows() == 0;

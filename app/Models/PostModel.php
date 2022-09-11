@@ -10,12 +10,13 @@ class PostModel extends Model
     protected $table = "posts";
     protected $primaryKey = 'post_id';
     protected $allowedFields = [
-        'post_id', 'post', 'images', 'liked_by', 'disliked_by', 'is_visible', 'created_by', 'created_on', 'timestamp'
+        'post_id', 'post', 'images', 'liked_by', 'disliked_by', 'is_visible', 'business_id', 'is_business_post', 'created_by', 'created_on', 'timestamp'
     ];
 
     var  $id = null;
     var  $userId = null;
     var  $search = null;
+    var  $businessId = null;
     var  $limit = null;
     var  $offset = null;
     var  $isVisible = null;
@@ -28,8 +29,8 @@ class PostModel extends Model
     public function selectPosts()
     {
         //$fields="*";
-        $fields="post_id,post,images,liked_by,disliked_by,posts.created_on,created_by,first_name,last_name,profile_pic";
-        $query = 'SELECT '.$fields.' from ' . $this->table . ' LEFT JOIN users ON posts.created_by = users.id';
+        $fields = "post_id,post,images,liked_by,disliked_by,posts.created_on,created_by,first_name,last_name,profile_pic";
+        $query = 'SELECT ' . $fields . ' from ' . $this->table . ' LEFT JOIN users ON posts.created_by = users.id';
         //echo $query;
         if ($this->search != null || $this->isVisible != null)
             $query = $query . " where";
@@ -61,11 +62,17 @@ class PostModel extends Model
     {
         $userModel = new UserModel();
         if ($userModel->hasPermission($this->userId, PERMISSION_ADD_POST)) {
+            $isBusinessPost = '0';
+            if ($this->businessId != null)
+                $isBusinessPost = '1';
             $data = [
                 'post' => $this->post,
                 'images'  => '',
                 'liked_by'  => '',
                 'disliked_by'  => '',
+                'is_visible'  => '1',
+                'is_business_post'  => $isBusinessPost,
+                'business_id'  => $this->businessId,
                 'is_visible'  => '1',
                 'created_by'  => $this->userId,
                 'created_on'  => Common::getCurrentTime(),
