@@ -20,10 +20,6 @@ class Business extends BaseController
     {
         $model = new BusinessModel();
         $result = $model->getCategories();
-        $model->owners = Common::getParam(owners);
-        $model->id = Common::getParam(id);
-
-        $model->addOwner();
         return $this->respond($result);
     }
     public function addOwner()
