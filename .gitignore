@@ -1,5 +1,5 @@
-app/Config/Database.php
 writable/*
 data/*
 vendor/*
 system/ThirdParty/*
+app/Config/Database.php
