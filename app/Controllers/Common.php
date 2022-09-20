@@ -77,6 +77,8 @@ define('PERMISSION_EDIT_USER', 'edit_user');
 define('PERMISSION_ADD_POST', 'add_post');
 define('PERMISSION_ADD_EVENT', 'add_event');
 define('PERMISSION_ADD_BUSINESS', 'add_business');
+define('PERMISSION_ADD_PLACE', 'add_place');
+
 
 //DEFAULT USER PERMISSIONS
 define('PERMISSION_DEFAULT', PERMISSION_VIEW_USER . ',' . PERMISSION_ADD_POST);
