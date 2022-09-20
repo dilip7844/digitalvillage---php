@@ -32,10 +32,10 @@ class Database extends Config
      */
     public $default = [
         'DSN'      => '',
-        'hostname' => '92.249.45.107',
-        'username' => 'packaltk_dev',
-        'password' => 'dev@7844',
-        'database' => 'packaltk_development',
+        'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'development',
         'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
