@@ -162,10 +162,22 @@ class Common
     {
         return Common::rootOfUploads() . 'posts/';
     }
+
     public static function rootOfBusinesses()
     {
         return Common::rootOfUploads() . 'businesses/';
     }
+
+    public static function rootOfProducts()
+    {
+        return Common::rootOfUploads() . 'products/';
+    }
+
+    public static function rootOfPlaces()
+    {
+        return Common::rootOfUploads() . 'places/';
+    }
+
     public static function rootOfEvents()
     {
         return Common::rootOfUploads() . 'events/';
