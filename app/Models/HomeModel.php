@@ -41,7 +41,7 @@ class HomeModel extends Model
             '' as end_date,
             p.post_id,
             '' as event_id,
-            '' as user_id
+            p.created_by  as user_id
         from
             posts p
         left join users on
@@ -80,7 +80,7 @@ class HomeModel extends Model
             e.end_date,
             '' as post_id,
             e.event_id,
-            '' as user_id
+            e.created_by  as user_id
         from
             events e
         left join users on
