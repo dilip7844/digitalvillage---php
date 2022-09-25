@@ -10,7 +10,7 @@ class UserModel extends Model
     protected $table = "users";
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'id', 'first_name', 'middle_name', 'last_name', 'mobile','address',
+        'id', 'first_name', 'middle_name', 'last_name', 'mobile','address','business',
         'gender', 'dob', 'occupation', 'is_authority', 'permissions',
         'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on', 'timestamp'
     ];
@@ -112,6 +112,7 @@ class UserModel extends Model
                 'mobile'  => $this->mobile,
                 'gender'  => $this->gender,
                 'address'  => $this->address,
+                'business'  => '',
                 'dob'  => $this->dob,
                 'occupation'  => $this->occupation,
                 'is_authority'  => '0',
