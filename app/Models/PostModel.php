@@ -134,14 +134,18 @@ class PostModel extends Model
                     $this->db->query("update " . $this->table . " set disliked_by='" . $newDislikeString . "' where post_id= " . $this->id);
                     $msg = " & Removed Dislike";
                 }
-                return Common::createResponse(STATUS_ACTION_POSITIVE, "Post Liked " . $msg);
+                $root = Common::createResponse(STATUS_ACTION_POSITIVE, "Post Liked " . $msg);
+                $root->data = $this->find($this->id);
+                return $root;
             } else return Common::createResponse(STATUS_FAILED, "Post Liked Failed");
         } else { // remove like
             $newLikeString = $this->removeItemFromArray('liked_by', $this->userId, "post_id=" . $this->id);
             $this->db->query("update " . $this->table . " set liked_by='" . $newLikeString . "' where post_id= " . $this->id);
-            if ($this->db->affectedRows() > 0)
-                return Common::createResponse(STATUS_ACTION_NEGATIVE, "Post Like Removed");
-            else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Like");
+            if ($this->db->affectedRows() > 0) {
+                $root = Common::createResponse(STATUS_ACTION_NEGATIVE, "Post Like Removed");
+                $root->data = $this->find($this->id);
+                return $root;
+            } else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Like");
         }
     }
 
@@ -165,14 +169,18 @@ class PostModel extends Model
                     $this->db->query("update " . $this->table . " set liked_by='" . $newDislikeString . "' where post_id= " . $this->id);
                     $msg = " & Removed Like";
                 }
-                return Common::createResponse(STATUS_ACTION_POSITIVE, "Post Disliked " . $msg);
+                $root = Common::createResponse(STATUS_ACTION_POSITIVE, "Post Disliked " . $msg);
+                $root->data = $this->find($this->id);
+                return $root;
             } else return Common::createResponse(STATUS_FAILED, "Post Disliked Failed");
         } else { // remove like
             $newLikeString = $this->removeItemFromArray('disliked_by', $this->userId, "post_id=" . $this->id);
             $this->db->query("update " . $this->table . " set disliked_by='" . $newLikeString . "' where post_id= " . $this->id);
-            if ($this->db->affectedRows() > 0)
-                return Common::createResponse(STATUS_ACTION_NEGATIVE, "Post Dislike Removed");
-            else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Dislike");
+            if ($this->db->affectedRows() > 0) {
+                $root = Common::createResponse(STATUS_ACTION_NEGATIVE, "Post Dislike Removed");
+                $root->data = $this->find($this->id);
+                return $root;
+            } else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Dislike");
         }
     }
 
