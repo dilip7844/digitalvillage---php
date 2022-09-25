@@ -114,6 +114,94 @@ class PostModel extends Model
         return Common::createResponse(STATUS_SUCCESS, "Post Fetched", $res);
     }
 
+    public function likePost()
+    {
+        if (!$this->isExistInArray('liked_by', $this->userId, "post_id=" . $this->id)) {
+            // if not liked . Do like
+            $arr = $this->db->query("Select liked_by from " . $this->table . " where post_id= " . $this->id);
+            if ($arr->getNumRows() > 0)
+                $res = $arr->getRowArray(0);
+            else return "";
+            if ($res["liked_by"] == "")
+                $this->db->query("update " . $this->table . " set liked_by=" . $this->userId . " where post_id= " . $this->id);
+            else  $this->db->query("update " . $this->table . " set liked_by= concat(liked_by,'," . $this->userId . "') where post_id= " . $this->id);
+
+            if ($this->db->affectedRows() > 0) {
+                $msg = "";
+                /// Removing dislike
+                if ($this->isExistInArray('disliked_by', $this->userId, "post_id=" . $this->id)) {
+                    $newDislikeString = $this->removeItemFromArray('disliked_by', $this->userId, "post_id=" . $this->id);
+                    $this->db->query("update " . $this->table . " set disliked_by='" . $newDislikeString . "' where post_id= " . $this->id);
+                    $msg = " & Removed Dislike";
+                }
+                return Common::createResponse(STATUS_SUCCESS, "Post Liked " . $msg);
+            } else return Common::createResponse(STATUS_FAILED, "Post Liked Failed");
+        } else { // remove like
+            $newLikeString = $this->removeItemFromArray('liked_by', $this->userId, "post_id=" . $this->id);
+            $this->db->query("update " . $this->table . " set liked_by='" . $newLikeString . "' where post_id= " . $this->id);
+            if ($this->db->affectedRows() > 0)
+                return Common::createResponse(STATUS_SUCCESS, "Post Like Removed");
+            else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Like");
+        }
+    }
+
+    public function dislikePost()
+    {
+        if (!$this->isExistInArray('disliked_by', $this->userId, "post_id=" . $this->id)) {
+            // if not disliked . Do Dislike
+            $arr = $this->db->query("Select disliked_by from " . $this->table . " where post_id= " . $this->id);
+            if ($arr->getNumRows() > 0)
+                $res = $arr->getRowArray(0);
+            else return "";
+            if ($res["disliked_by"] == "")
+                $this->db->query("update " . $this->table . " set disliked_by=" . $this->userId . " where post_id= " . $this->id);
+            else  $this->db->query("update " . $this->table . " set disliked_by= concat(disliked_by,'," . $this->userId . "') where post_id= " . $this->id);
+
+            if ($this->db->affectedRows() > 0) {
+                $msg = "";
+                /// Removing dislike
+                if ($this->isExistInArray('liked_by', $this->userId, "post_id=" . $this->id)) {
+                    $newDislikeString = $this->removeItemFromArray('liked_by', $this->userId, "post_id=" . $this->id);
+                    $this->db->query("update " . $this->table . " set liked_by='" . $newDislikeString . "' where post_id= " . $this->id);
+                    $msg = " & Removed Like";
+                }
+                return Common::createResponse(STATUS_SUCCESS, "Post Disliked " . $msg);
+            } else return Common::createResponse(STATUS_FAILED, "Post Disliked Failed");
+        } else { // remove like
+            $newLikeString = $this->removeItemFromArray('disliked_by', $this->userId, "post_id=" . $this->id);
+            $this->db->query("update " . $this->table . " set disliked_by='" . $newLikeString . "' where post_id= " . $this->id);
+            if ($this->db->affectedRows() > 0)
+                return Common::createResponse(STATUS_SUCCESS, "Post Dislike Removed");
+            else return Common::createResponse(STATUS_FAILED, "Unable to remove Post Dislike");
+        }
+    }
+
+    private function isExistInArray($field, $contains, $where)
+    {
+        $query = 'SELECT ' . $field . ' from ' . $this->table . ' where ' . $where . '';
+        $res = $this->db->query($query)->getRowArray(0);
+        $array = explode(',', $res[$field]);
+        $isExists = array_search($contains, $array);
+        return $isExists != '';
+    }
+
+    private function removeItemFromArray($field, $item, $where) // returns updated String
+    {
+        $query = 'SELECT ' . $field . ' from ' . $this->table . ' where ' . $where . '';
+        $res = $this->db->query($query)->getRowArray(0);
+        $array = explode(',', $res[$field]);
+        $isExists = array_search($item, $array);
+        if ($isExists !== FALSE) {
+            unset($array[$isExists]);
+        }
+        $str = implode(',', $array);
+        return $str;
+    }
+
+    public function remove()
+    {
+    }
+
     private function isResultEmpty()
     {
         return $this->result->getNumRows() == 0;

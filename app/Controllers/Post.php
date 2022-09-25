@@ -47,4 +47,22 @@ class Post extends BaseController
         $result = $model->getPost();
         return $this->respond($result);
     }
+
+    public function likePost()
+    {
+        $model = new PostModel();
+        $model->id = Common::getParam(id);
+        $model->userId = Common::getParam(userId);
+        $result = $model->likePost();
+        return $this->respond($result);
+    }
+
+    public function dislikePost()
+    {
+        $model = new PostModel();
+        $model->id = Common::getParam(id);
+        $model->userId = Common::getParam(userId);
+        $result = $model->dislikePost();
+        return $this->respond($result);
+    }
 }
