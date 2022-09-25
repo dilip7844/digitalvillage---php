@@ -69,6 +69,8 @@ define('STATUS_USER_NOT_FOUND', '3');
 define('STATUS_USER_INACTIVE', '4');
 define('STATUS_USER_UNVERIFIED', '5');
 define('STATUS_NO_PERMISSION', '6');
+define('STATUS_ACTION_POSITIVE', '7');
+define('STATUS_ACTION_NEGATIVE', '8');
 
 // PERSMISSIONS
 define('PERMISSION_VIEW_USER', 'view_user');
