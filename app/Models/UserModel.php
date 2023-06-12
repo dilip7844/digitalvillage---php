@@ -8,35 +8,47 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table = "users";
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'user_id';
     protected $allowedFields = [
-        'id', 'first_name', 'middle_name', 'last_name', 'mobile','address','business',
-        'gender', 'dob', 'occupation', 'is_authority', 'permissions',
-        'is_verified', 'is_active', 'service', 'profile_pic', 'fcm_token', 'created_on', 'timestamp'
+        'user_id',
+        'name',
+        'mobile',
+        'address',
+        'business_id',
+        'gender',
+        'dob',
+        'occupation_id',
+        'is_authority',
+        'permissions',
+        'is_verified',
+        'is_active',
+        'service',
+        'profile_pic',
+        'fcm_token',
+        'created_on',
+        'timestamp'
     ];
 
     var $tableOccupation = "occupations";
-    
-    var  $search = null;
-    var  $id = null;
-    var  $userId = null;
-    var  $mobile = null;
-    var  $limit = null;
-    var  $offset = null;
-    var  $isActive = null;
-    var  $isVerified = null;
-    var  $isAuthority = null;
-    var  $permissions = null;
-    var  $fcmToken = null;
-    var  $profilePic = null;
 
-    var  $firstName = null;
-    var  $middleName = null;
-    var  $lastName = null;
-    var  $dob = null;
-    var  $gender = null;
-    var  $address = null;
-    var  $occupation = null;
+    var $search = null;
+    var $id = null;
+    var $userId = null;
+    var $mobile = null;
+    var $limit = null;
+    var $offset = null;
+    var $isActive = null;
+    var $isVerified = null;
+    var $isAuthority = null;
+    var $permissions = null;
+    var $fcmToken = null;
+    var $profilePic = null;
+
+    var $name = null;
+    var $dob = null;
+    var $gender = null;
+    var $address = null;
+    var $occupationId = null;
 
 
     var $result = null;
@@ -44,7 +56,7 @@ class UserModel extends Model
     public function selectUsers()
     {
         // if($this->hasPermission($this->userId,PERMISSION_VIEW_USER)){
-        $query = 'SELECT * from ' . $this->table . ' LEFT JOIN occupations ON users.occupation = occupations.occupation_id';
+        $query = 'SELECT * from ' . $this->table . ' LEFT JOIN occupations ON users.occupation_id = occupations.occupation_id';
         //echo $query;
         if ($this->search != null || $this->isActive != null || $this->isVerified != null || $this->isAuthority != null)
             $query = $query . " where";
@@ -62,15 +74,15 @@ class UserModel extends Model
         }
 
         if ($this->isAuthority != null) {
-            $query = $query . " is_authority=" . $this->isAuthority  . "";
+            $query = $query . " is_authority=" . $this->isAuthority . "";
             if ($this->search != null)
                 $query = $query . " and";
         }
 
         if ($this->search != null) {
-            $query = $query . " (first_name like '%" . $this->search . "%' OR last_name like '%" . $this->search . "%' OR mobile like '%" . $this->search . "%')";
+            $query = $query . " (name like '%" . $this->search . "%' OR mobile like '%" . $this->search . "%')";
         }
-        $query = $query . ' order by id desc';
+        $query = $query . ' order by user_id desc';
 
         if ($this->limit != null && $this->offset != null) {
             $query = $query . ' limit ' . $this->limit . ' offset ' . $this->offset;
@@ -79,60 +91,53 @@ class UserModel extends Model
 
         $this->result = $this->db->query($query);
         $res = $this->result->getResult();
-        if ($this->isResultEmpty())
-            return Common::createResponse(STATUS_NO_DATA, "No Users");
-        return Common::createResponse(STATUS_SUCCESS, "Users Fetched", $res);
+        return $res;
         //}else return Common::createResponse(1, "Sorry !! You don't have permission to view users. Please contact Authority");
     }
 
     public function getUser()
     {
-        $where = null;
-        if ($this->id != null)
-            $where = 'id=' . $this->id;
-        if ($this->mobile != null)
-            $where = 'mobile=' . $this->mobile;
-        $this->result = $this->db->query('SELECT * from ' . $this->table . ' LEFT JOIN occupations ON users.occupation = occupations.occupation_id where ' . $where);
-        $res = $this->result->getResult();
-        if ($this->isResultEmpty())
-            return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
-        return Common::createResponse(STATUS_SUCCESS, "User Fetched", $res);
+        $res = $this->select('users.*,occupations.*')
+            ->join('occupations', 'occupations.occupation_id = users.occupation_id', 'left')
+            ->orWhere("user_id", $this->id)->orWhere("mobile", $this->mobile)->first();
+        return $res;
     }
 
 
     public function insertUser()
     {
+        $result = new ResultModel();
         if ($this->isExist('mobile', $this->mobile)) {
-            return Common::createResponse(1, "User already exist with mobile Number " . $this->mobile);
+            $result->statusCode = STATUS_ALREADY_EXIST;
+            return $result;
         } else {
             $data = [
-                'first_name' => $this->firstName,
-                'middle_name'  => $this->middleName,
-                'last_name'  => $this->lastName,
-                'mobile'  => $this->mobile,
-                'gender'  => $this->gender,
-                'address'  => $this->address,
-                'business'  => '',
-                'dob'  => $this->dob,
-                'occupation'  => $this->occupation,
-                'is_authority'  => '0',
-                'permissions'  => PERMISSION_DEFAULT,
-                'is_verified'  => '0',
-                'is_active'  => '1',
-                'service'  => '',
-                'created_on'  => Common::getCurrentTime(),
-                'profile_pic' => '',
+                'name' => $this->name,
+                'mobile' => $this->mobile,
+                'gender' => $this->gender,
+                'address' => $this->address,
+                'business_id' => 0,
+                'dob' => $this->dob,
+                'occupation_id' => $this->occupationId,
+                'is_authority' => 'No',
+                //'permissions' => PERMISSION_DEFAULT,
+                'is_verified' => 'Yes',
+                'is_active' => 'Yes',
+                'service' => '0',
+                'profile_pic' => 'da',
                 'fcm_token' => $this->fcmToken,
+                'created_on' => Common::getCurrentTime(),
                 'timestamp' => Common::getCurrentTimeStamp()
             ];
+            //print_r($data) ;
             $res = $this->insert($data);
             if ($res) {
-                $root = Common::createResponse(STATUS_SUCCESS, "User Created");
-                $root->data = $this->find($this->getInsertID());
-                return $root;
+                $result->statusCode = STATUS_SUCCESS;
+                $result->data = $this->find($this->getInsertID());
             } else {
-                return Common::createResponse(STATUS_FAILED, "Failed to Create User");
+                $result->statusCode = STATUS_FAILED;
             }
+            return $result;
         }
     }
 
@@ -143,28 +148,30 @@ class UserModel extends Model
                 $this->result = $this->db->query("UPDATE " . $this->table . " set permissions= '" . $this->permissions . "' where id=" . $this->id);
                 if ($this->db->affectedRows() > 0)
                     return Common::createResponse(STATUS_SUCCESS, "Permission Modified");
-                else return Common::createResponse(STATUS_FAILED, "Unable to Modify Permissions");
-            } else return Common::createResponse(STATUS_USER_INACTIVE, "User is Deactive, can't modify permission.");
-        } else return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+                else
+                    return Common::createResponse(STATUS_FAILED, "Unable to Modify Permissions");
+            } else
+                return Common::createResponse(STATUS_USER_INACTIVE, "User is Deactive, can't modify permission.");
+        } else
+            return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
     }
 
     public function changeActiveStatus()
     {
-        if ($this->isExist("id", $this->id)) {
-            if ($this->isUserActive($this->id) && $this->isActive == '1') {
-                return Common::createResponse(1, "User is already Active");
-            } else if (!$this->isUserActive($this->id) && $this->isActive == '0') {
-                return Common::createResponse(1, "User is already Deactive");
-            } else {
-                $this->result = $this->db->query("UPDATE " . $this->table . " set is_active=" . $this->isActive . " where id=" . $this->id);
-                if ($this->db->affectedRows() > 0) {
-                    $status = "Deactivated";
-                    if ($this->isActive == '1')
-                        $status = "Activated";
-                    return Common::createResponse(STATUS_SUCCESS, "User is " . $status);
-                } else return Common::createResponse(STATUS_FAILED, "Unable to change active status");
-            }
-        } else return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+        if ($this->isExist("user_id", $this->id)) {
+            $nextStatus = 'No';
+            if (!$this->isUserActive($this->id))
+                $nextStatus = 'Yes';
+            $data = [
+                'is_active' => $nextStatus
+            ];
+            $result = $this->update($this->id,$data);
+            if ($result)
+                return STATUS_SUCCESS;
+            else
+                return STATUS_FAILED;
+        } else
+            return STATUS_USER_NOT_FOUND;
     }
 
     public function updateUser()
@@ -172,7 +179,8 @@ class UserModel extends Model
         if ($this->userId != $this->id) { // User is updating other's profile ,
             if ($this->hasPermission($this->userId, PERMISSION_EDIT_USER)) { //Check if he has the permission
 
-            } else return Common::createResponse(STATUS_NO_PERMISSION, "You don't have permission to update user's information");
+            } else
+                return Common::createResponse(STATUS_NO_PERMISSION, "You don't have permission to update user's information");
         } else { //User is Updating self profile
 
         }
@@ -189,20 +197,25 @@ class UserModel extends Model
             if (Common::uploadImage($fileModel->getTempName(), $location)) {
                 $this->db->query("UPDATE " . $this->table . " set profile_pic= '" . $location . "' where id=" . $this->userId);
                 return Common::createResponse(STATUS_SUCCESS, "Profile Pic Updated Successfully");
-            } else return Common::createResponse(STATUS_FAILED, "Failed to upload Profile Pic");
-        } else return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+            } else
+                return Common::createResponse(STATUS_FAILED, "Failed to upload Profile Pic");
+        } else
+            return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
     }
 
     public function updateFCMToken()
     {
-        if ($this->isExist("id", $this->id)) {
+        if ($this->isExist("user_id", $this->id)) {
             if ($this->isUserActive($this->id)) {
                 $this->result = $this->db->query("UPDATE " . $this->table . " set fcm_token= '" . $this->fcmToken . "' where id=" . $this->id);
                 if ($this->db->affectedRows() > 0)
                     return Common::createResponse(STATUS_SUCCESS, "Token Updated");
-                else return Common::createResponse(STATUS_FAILED, "Unable to update token");
-            } else return Common::createResponse(STATUS_USER_INACTIVE, "User is Deactive, can't update token.");
-        } else return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+                else
+                    return Common::createResponse(STATUS_FAILED, "Unable to update token");
+            } else
+                return Common::createResponse(STATUS_USER_INACTIVE, "User is Deactive, can't update token.");
+        } else
+            return Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
     }
 
     public function getOccupations()
@@ -216,7 +229,7 @@ class UserModel extends Model
 
     public function hasPermission($id, $strPermission)
     {
-        $query = 'SELECT permissions from ' . $this->table . ' where id=' . $id . '';
+        $query = 'SELECT permissions from ' . $this->table . ' where user_id=' . $id . '';
         $res = $this->db->query($query)->getRowArray(0);
         $array = explode(',', $res['permissions']);
         $permissionExists = array_search($strPermission, $array);
@@ -225,40 +238,37 @@ class UserModel extends Model
 
     private function isExist($key, $value)
     {
-        $query = 'SELECT id from ' . $this->table . ' where ' . $key . '=' . $value . '';
+        $query = 'SELECT user_id from ' . $this->table . ' where ' . $key . '=' . $value . '';
         $res = $this->db->query($query);
         return $res->getNumRows() > 0;
     }
-
     private function getMobile($userId)
     {
-        $query = 'SELECT mobile from ' . $this->table . ' where id=' . $userId . '';
-        $arr = $this->db->query($query);
-        if ($arr->getNumRows() > 0)
-            $res = $arr->getRowArray(0);
-        else return "";
+        $res = $this->find($userId);
         return $res["mobile"];
     }
 
-    private function isUserActive($id)
+    private function isUserActive($userId)
     {
-        $query = 'SELECT is_active from ' . $this->table . ' where id=' . $id . '';
-        $res = $this->db->query($query)->getRowArray(0);
-        return $res['is_active'] == 1;
+        $res = $this->find($userId);
+        return $res["is_active"] == 'Yes';
     }
 
     public function addBusiness($businessId)
     {
-        $arr = $this->db->query("Select business from " . $this->table . " where id= " . $this->id);
+        $arr = $this->db->query("Select business from " . $this->table . " where user_id= " . $this->id);
         if ($arr->getNumRows() > 0)
             $res = $arr->getRowArray(0);
-        else return "";
+        else
+            return "";
         if ($res["business"] == "")
             $this->db->query("update " . $this->table . " set business=" . $businessId . " where id= " . $this->id);
-        else  $this->db->query("update " . $this->table . " set business= concat(business,'," . $businessId . "') where id= " . $this->id);
+        else
+            $this->db->query("update " . $this->table . " set business= concat(business,'," . $businessId . "') where id= " . $this->id);
         if ($this->db->affectedRows() > 0)
             return Common::createResponse(STATUS_SUCCESS, "Updated User's Business");
-        else return Common::createResponse(STATUS_FAILED, "Unable to update users Business");
+        else
+            return Common::createResponse(STATUS_FAILED, "Unable to update users Business");
     }
 
     private function isResultEmpty()

@@ -7,14 +7,12 @@ use stdClass;
 
 //User
 define('id', 'id'); //int
-define('firstName', 'firstName');
-define('middleName', 'middleName');
-define('lastName', 'lastName');
+define('name', 'name');
 define('dob', 'dob');
 define('address', 'address');
 define('mobile', 'mobile');
 define('gender', 'gender');
-define('occupation', 'occupation');
+define('occupationId', 'occupationId');
 define('isAuthority', 'isAuthority');
 define('isVerified', 'isVerified');
 define('permissions', 'permissions');
@@ -24,7 +22,7 @@ define('domain', 'domain');
 define('limit', 'limit');
 define('offset', 'offset');
 define('search', 'search');
-define('desc', 'desc');  //boolean
+define('desc', 'desc'); //boolean
 define('userId', 'userId');
 define('profilePic', 'profilePic');
 
@@ -62,8 +60,8 @@ define('images', 'images');
 define('isVisible', 'isVisible');
 
 //STATUS CODES
-define('STATUS_SUCCESS', '0');
-define('STATUS_FAILED', '1');
+define('STATUS_SUCCESS', '1');
+define('STATUS_FAILED', '0');
 define('STATUS_NO_DATA', '2');
 define('STATUS_USER_NOT_FOUND', '3');
 define('STATUS_USER_INACTIVE', '4');
@@ -71,6 +69,7 @@ define('STATUS_USER_UNVERIFIED', '5');
 define('STATUS_NO_PERMISSION', '6');
 define('STATUS_ACTION_POSITIVE', '7');
 define('STATUS_ACTION_NEGATIVE', '8');
+define('STATUS_ALREADY_EXIST', '8');
 
 // PERSMISSIONS
 define('PERMISSION_VIEW_USER', 'view_user');
@@ -92,12 +91,26 @@ class Common
     public static function createResponse($status, $message, $data = null)
     {
         $obj = new stdClass();
-        $obj->status = $status;
+        $obj->status = intval($status);
         $obj->message = $message;
         if ($data != null) {
             $obj->data = $data;
         }
         return $obj;
+    }
+
+    public static function validateResponse($status, $message)
+    {
+        $response = null;
+        switch ($status) {
+            case STATUS_USER_NOT_FOUND:
+                $response = Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+                break;
+            default:
+                $response = Common::createResponse(STATUS_FAILED, $message);
+                break;
+        }
+        return response;
     }
 
     public static function getDomain()
@@ -106,18 +119,24 @@ class Common
         return '' . Common::getParam(domain);
     }
 
+    public static function isResultEmpty($result)
+    {
+        return $result->getNumRows() == 0;
+    }
     public static function getParam($param)
     {
         if (isset($_POST[$param]))
             return $_POST[$param];
-        else return null;
+        else
+            return null;
     }
 
     public static function getFile($param)
     {
         if (isset($_FILES[$param]))
             return $_FILES[$param];
-        else return null;
+        else
+            return null;
     }
 
     public static function setTimeZone()

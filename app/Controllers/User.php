@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\ResultModel;
 use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 
@@ -10,10 +11,12 @@ use CodeIgniter\API\ResponseTrait;
 class User extends BaseController
 {
     use ResponseTrait;
+    var $response = null;
+
     public function __construct()
     {
         $domain = Common::getDomain();
-         \Config\Database::connect('default')->setDatabase($domain);
+        \Config\Database::connect('default')->setDatabase($domain);
     }
 
     public function getAllUsers()
@@ -26,8 +29,12 @@ class User extends BaseController
         $model->isVerified = Common::getParam(isVerified);
         $model->isAuthority = Common::getParam(isAuthority);
         //  $desc = Common::getParam(desc);
-        $result = $model->selectUsers();
-        return $this->respond($result);
+        $res = $model->selectUsers();
+        if (empty($res))
+            $response = Common::createResponse(STATUS_NO_DATA, "No Users");
+        else
+            $response = Common::createResponse(STATUS_SUCCESS, "Users Fetched", $res);
+        return $this->respond($response);
     }
 
     public function getUser()
@@ -35,25 +42,38 @@ class User extends BaseController
         $model = new UserModel();
         $model->id = Common::getParam(id);
         $model->mobile = Common::getParam(mobile);
-        $result = $model->getUser();
-        return $this->respond($result);
+        $res = $model->getUser();
+        if (empty($res))
+            $response = Common::createResponse(STATUS_USER_NOT_FOUND, "User not found");
+        else
+            $response = Common::createResponse(STATUS_SUCCESS, "User Fetched", $res);
+        return $this->respond($response);
     }
 
     public function createUser()
     {
         $model = new UserModel();
-        $model->firstName=Common::getParam(firstName);
-        $model->middleName = Common::getParam(middleName);
-        $model->lastName = Common::getParam(lastName);
+        $model->name = Common::getParam(name);
         $model->mobile = Common::getParam(mobile);
         $model->gender = Common::getParam(gender);
-        $model->occupation = Common::getParam(occupation);
+        $model->occupationId = Common::getParam(occupationId);
         $model->fcmToken = Common::getParam(fcmToken);
         $model->dob = Common::getParam(dob);
         $model->address = Common::getParam(address);
-      
+
         $result = $model->insertUser();
-        return $this->respond($result);
+        switch ($result->statusCode) {
+            case STATUS_SUCCESS:
+                $response = Common::createResponse(STATUS_SUCCESS, "User Created Successfully", $result->data);
+                break;
+            case STATUS_ALREADY_EXIST:
+                $response = Common::createResponse(STATUS_ALREADY_EXIST, "User already exist with mobile Number " . $model->mobile);
+                break;
+         default:
+                $response = Common::validateResponse($result->statusCode, "Failed to create user ");
+                break;
+        }
+        return $this->respond($response);
     }
 
     public function deleteUser()
@@ -63,7 +83,8 @@ class User extends BaseController
         $result = $model->delete($id);
         if ($result) {
             return $this->respond(Common::createResponse(0, "User Deleted"));
-        } else $this->respond(Common::createResponse(1, "Failed to Delete User"));
+        } else
+            $this->respond(Common::createResponse(1, "Failed to Delete User"));
     }
 
     public function updateFCMToken()
@@ -88,9 +109,17 @@ class User extends BaseController
     {
         $model = new UserModel();
         $model->id = Common::getParam(id);
-        $model->isActive = Common::getParam(isActive);
-        $result = $model->changeActiveStatus();
-        return $this->respond($result);
+        $model->userId = Common::getParam(userId);
+        $resultCode = $model->changeActiveStatus();
+        switch ($resultCode) {
+            case STATUS_SUCCESS:
+                $response = Common::createResponse(STATUS_SUCCESS, "Status Changed Successfully");
+                break;
+                default:
+                $response=Common::validateResponse($resultCode,"Failed to change status");
+                break;
+        }
+        return $this->respond($response);
     }
 
     public function updateUser()
@@ -104,10 +133,10 @@ class User extends BaseController
 
     public function updateProfilePic()
     {
-        $model=new UserModel();
-        $model->profilePic=Common::getFile(profilePic);
+        $model = new UserModel();
+        $model->profilePic = Common::getFile(profilePic);
         $model->userId = Common::getParam(userId);
-        $result=$model->updateProfilePic();
+        $result = $model->updateProfilePic();
         return $this->respond($result);
     }
 
